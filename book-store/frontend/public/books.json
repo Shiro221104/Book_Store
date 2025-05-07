@@ -1,0 +1,101 @@
+[
+    {
+      "id": 1,
+      "title": "Harry Potter and the Order of the Phoenix",
+      "description": "Harry Potter is about to start his fifth year at Hogwarts School of Witchcraft and Wizardry. Unlike most schoolboys, Harry never enjoys his summer holidays",
+      "genre":"Novel",
+      "category": "Adventure",
+      "trending": true,
+      "Image": "book-1.png",
+      "Price": 27.99,
+      "Author":"J.K.Rowling",
+      "Publisher":"Scholastic"
+    },
+
+    {
+      "id": 2,
+      "title": "Marvel-Verse: Iron Man",
+      "description": "Iron Man is one of the greatest heroes in the Marvel-Verse - and these are some of his most action-packed adventures! When the genius Tony Stark is held captive and forced to make weapons, his best chance of escape lies in building the greatest weapon of all - the very fi rst version of the Iron Man armor! Then, Shellhead meets Webhead as Iron Man and Spider-Man team up to take down the deadly Radioactive Man! And when Tony Stark makes a dramatic public return to start the next chapter of his business life, a newly-souped up Iron Man finds himself targeted for death! Finally, does Iron Man stand a ghost of a chance battling the Marvel-Verse's most fearsome armored foe - the dastardly Doctor Doom?!",
+      "genre":"Comic",
+      "category": "Adventure",
+      "trending": false,
+      "Image": "book-2.png",
+      "Price": 9.99,
+      "Author":"Fred Van Lente, David Michelinie and Bob Layton",
+      "Publisher":"Outreach/New Reader"
+    },
+    {
+      "id": 3,
+      "title": "The Buffalo Hunter Hunter",
+      "description": "A diary, written in 1912 by a Lutheran pastor is discovered within a wall. What it unveils is a slow massacre, a chain of events that go back to 217 Blackfeet dead in the snow. Told in transcribed interviews by a Blackfeet named Good Stab, who shares the narrative of his peculiar life over a series of confessional visits. This is an American Indian revenge story written by one of the new masters of horror, Stephen Graham Jones.",
+      "genre":"Fiction",
+      "category": "Horror",
+      "trending": true,
+      "Image": "book-3.png",
+      "Price": 27.89,
+      "Author":"Stephen Graham Jones",
+      "Publisher":"S&S/Saga Press"
+    },
+    {
+      "id": 4,
+      "title": "An Illustrated Treasury of Grimm's Fairy Tales",
+      "description": "Two hundred years ago, the Brothers Grimm published their famous collection of folk tales, including these thirty much-loved stories of helpful elves; giants who can see into the next land; foolish but good-hearted lads; princesses with golden hair; faithful servants and wicked queens. This sumptuously illustrated collection of essential Grimm classics includes stories every childhood needs: The Princess and the Frog, Little Red Riding Hood, Sleeping Beauty, Cinderella, Rumpelstiltskin and dozens more. Each tale is brought to life with radiant, faithful pictures from Daniela Drescher, one of Germany's best-loved illustrators, which are sure to fire any child's imagination.",
+      "genre":"Fairy Tales",
+      "category": "Fantasy",
+      "trending": false,
+      "Image": "book-4.png",
+      "Price": 23.20,
+      "Author":"Jacob and Wilhelm Grimm",
+      "Publisher":"Floris Books"
+    },
+    {
+      "id": 5,
+      "title": "Romeo and Juliet",
+      "description": "In Romeo and Juliet, Shakespeare creates a violent world, in which two young people fall in love. It is not simply that their families disapprove; the Montagues and the Capulets are engaged in a blood feud.  In this death-filled setting, the movement from love at first sight to the lovers’ final union in death seems almost inevitable. And yet, this play set in an extraordinary world has become the quintessential story of young love. In part because of its exquisite language, it is easy to respond as if it were about all young lovers.",
+      "genre":"Fiction",
+      "category": "Romance",
+      "trending": true,
+      "Image": "book-5.png",
+      "Price": 6.99,
+      "Author":"William Shakespeare",
+      "Publisher":"Simon & Schuster"
+    },
+    {
+      "id": 6,
+      "title": "The Missing Half",
+      "description": "At 24, Nicole “Nic” Monroe is stuck — living alone in Mishawaka, Indiana, working a dead-end job, and reeling from a recent DWI. For the past seven years, her life’s been defined by one tragedy: the unexplained disappearance of her older sister, Kasey. The only clue was Kasey’s abandoned car, eerily similar to the case of Jules Connor, who vanished two weeks earlier. Both cases went cold. Nic has given up hope — until Jenna Connor, Jules’s sister, shows up with new determination. Together, the two women reignite the search for answers, setting off a gripping journey that could uncover the truth—or destroy everything they know.",
+      "genre":"Novel",
+      "category": "Mystery",
+      "trending": false,
+      "Image": "book-6.png",
+      "Price": 30,
+      "Author":"Ashley Flowers",
+      "Publisher":"Bantam"
+
+    },
+    {
+      "id": 7,
+      "title": "The Garden of Words",
+      "description": "On rainy mornings, Takao can never bring him-self to go to school--instead, he spends that time at the beautiful Shinjuku Gyoen gardens and finds a brief reprieve from everything else in his life among the trees and flowers. And on one of those mornings, he discovers a mysterious woman named Yukino in his haven, skipping work, and an unlikely friendship blooms between them. But though these two are the center of this story, they are far from the only ones trying to find their way in life. From director Makoto Shinkai comes a deeper look at his award-winning 2013 film, The Garden of Words, full of additional scenes and perspectives to show a whole new side of the many characters who brought the film to life.",
+      "genre":"Manga",
+      "category": "Fantasy",
+      "trending": true,
+      "Image": "book-7.png",
+      "Price": 20,
+      "Author":"Makoto Shinkai",
+      "Publisher":"Yen on"
+    },
+    {
+      "id": 8,
+      "title": "Your Name",
+      "description": "Mitsuha, a high school girl living in a small town in the mountains, has a dream that she's a boy living in Tokyo. Taki, a high school boy in Tokyo, dreams he's a girl living in a quaint little mountain town. Sharing bodies, relationships, and lives, the two become inextricably interwoven--but are any connections truly inseverable in the grand tapestry of fate?Written by director MAKOTO SHINKAI during the production of the film by the same title, your name. is in turns funny, heartwarming, and heart-wrenching as it follows the struggles of two young people determined to hold on to one another.",
+      "genre":"Manga",
+      "category": "Romance",
+      "trending": true,
+      "Image": "book-8.png",
+      "Price": 20,
+      "Author":"Makoto Shinkai",
+      "Publisher":"Yen on"
+      
+    }
+]
