@@ -1,8 +1,10 @@
 package com.zosh.controllers;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -11,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +26,7 @@ import com.zosh.security.services.UserDetailsImpl;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -56,7 +59,7 @@ public class AuthController {
 
             return ResponseEntity.ok(Map.of(
                     "token", jwt,
-                    "username", userDetails.getUsername()
+                    "user", userDetails.getUser()
             ));
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(401).body("Invalid username or password");
@@ -76,15 +79,42 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Email already in use!");
         }
 
-        // ✅ Gán role mặc định nếu chưa có
+
         if (userRequest.getRole() == null) {
             userRequest.setRole(Role.user);
         }
 
-        // ❌ Không mã hóa nếu bạn muốn plain text (đã cấu hình encoder để không mã hóa)
         // userRequest.setPassword(encoder.encode(userRequest.getPassword()));
 
         userRepository.save(userRequest);
         return ResponseEntity.ok("User registered successfully!");
     }
+
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateProfile(@RequestBody User updatedUser, Authentication authentication) {
+        // Lấy username từ token
+        String username = authentication.getName();
+
+    
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        User user = optionalUser.get();
+
+      
+        user.setFullName(updatedUser.getFullName());
+        user.setEmail(updatedUser.getEmail());
+        user.setPhoneNumber(updatedUser.getPhoneNumber());
+        user.setAddress(updatedUser.getAddress());
+
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok(user);
+    }
 }
+
+

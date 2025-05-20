@@ -76,6 +76,8 @@ public AuthenticationProvider authenticationProvider() {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/books/**").permitAll() 
+                .requestMatchers("/api/orders/**").permitAll()  
                 .anyRequest().authenticated()
             )
             .addFilterBefore(authenticationJwtTokenFilter(),UsernamePasswordAuthenticationFilter.class);
@@ -95,5 +97,6 @@ public CorsConfigurationSource corsConfigurationSource() {
     source.registerCorsConfiguration("/**", config);
     return source;
 }
+
 
 }

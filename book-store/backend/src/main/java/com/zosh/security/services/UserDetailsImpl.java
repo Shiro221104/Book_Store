@@ -19,7 +19,7 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (user.getRole() == null) {
-            return List.of(); // Không có quyền nếu role bị null
+            return List.of(); 
         }
         return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }

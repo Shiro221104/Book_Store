@@ -34,10 +34,11 @@ protected void doFilterInternal(HttpServletRequest request,
 
 
     String path = request.getServletPath();
-    if (path.equals("/api/login") || path.equals("/api/register") || path.startsWith("/api/auth")) {
-        filterChain.doFilter(request, response);
-        return;
-    }
+if (path.equals("/api/auth/login") || path.equals("/api/auth/register")) {
+    filterChain.doFilter(request, response);
+    return;
+}
+
 
     final String authHeader = request.getHeader("Authorization");
     String username = null;
