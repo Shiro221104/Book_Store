@@ -9,6 +9,11 @@ import BookPage from "../pages/BookPage";
 import Books from "../pages/Books";
 import Category from "../pages/CategoryPage";
 import Genre from "../pages/GenrePage";
+import OrderPage from "../pages/OrderPage";
+import Profile from "../componemts/Profile";
+
+import SearchingPage from "../pages/SearchingPage";
+import AdminDashboard from "../pages/AdminDashboard";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +26,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/order",
-        element: <div>Orders</div>,
+        element: <OrderPage/>
+      },
+       {
+        path: "/users/:id",
+        element: <Profile/>
       },
       {
         path: "/about",
@@ -47,9 +56,12 @@ const router = createBrowserRouter([
       path:"/books",
       element: <Books/>
      },
+   { path: "/search", element: <SearchingPage /> }, 
+{ path: "/admin/dashboard", element: <AdminDashboard /> },
      { path: "/books/:id", element: <BookPage/> },
      { path: "/category/:categoryName",element:<Category/>},
      { path: "/genre/:genreName",element:<Genre/>}
+   
     ],
   },
 ]);

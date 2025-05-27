@@ -1,7 +1,9 @@
 package com.zosh.controllers;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,24 +20,21 @@ import com.zosh.models.Book;
 import com.zosh.models.BookOrder;
 import com.zosh.models.Order;
 import com.zosh.models.OrderStatus;
-import com.zosh.models.Payment;
+import com.zosh.models.PaymentMethod;
 import com.zosh.models.User;
 import com.zosh.payload.BookOrderRequest;
 import com.zosh.payload.OrderRequest;
 import com.zosh.repository.BookRepository;
 import com.zosh.repository.OrderRepository;
 import com.zosh.repository.UserRepository;
-import com.zosh.security.services.OrderService;
+
+import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/api/orders")
-@CrossOrigin(origins = "http://localhost:5173") 
+@CrossOrigin(origins = "http://localhost:5173")
 public class OrderController {
 
-    @Autowired
-    private OrderService orderService;
-
-    
     @Autowired
     private OrderRepository orderRepository;
 
@@ -46,61 +45,66 @@ public class OrderController {
     private BookRepository bookRepository;
 
     @PostMapping
+    @Transactional
     public ResponseEntity<?> createOrder(@RequestBody OrderRequest request) {
-        User user = userRepository.findById(request.getUser().getId())
-            .orElseThrow(() -> new RuntimeException("User not found"));
 
+        Optional<User> optionalUser = userRepository.findById(request.getUser().getId());
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+        User user = optionalUser.get();
+
+  
         Order order = new Order();
         order.setUser(user);
         order.setStatus(OrderStatus.valueOf(request.getStatus()));
-        order.setDate(LocalDateTime.now());
-     order.setTotalPrice((double) request.getTotalPrice());
-    order.setShippingAddress(request.getShippingAddress());
+        order.setShippingAddress(request.getShippingAddress());
+        order.setTotalPrice(request.getTotalPrice());
+        order.setDate(request.getDate() != null ? request.getDate() : LocalDateTime.now());
+        order.setPaymentMethod(PaymentMethod.valueOf(request.getPaymentMethod()));
 
+        List<BookOrder> bookOrderList = new ArrayList<>();
 
-        // Set payment
-        Payment payment = new Payment();
-    
-        order.setPayment(payment);
+        for (BookOrderRequest bor : request.getBookOrders()) {
+            Optional<Book> optionalBook = bookRepository.findById(bor.getBookId());
+            if (optionalBook.isEmpty()) {
+                return ResponseEntity.badRequest().body("Book not found: ID " + bor.getBookId());
+            }
 
-        // Set book orders
-        for (BookOrderRequest item : request.getBookOrders()) {
-    Book book = bookRepository.findById(item.getBookId())
-        .orElseThrow(() -> new RuntimeException("Book not found"));
-
-           
-
-            BookOrder bookOrder = new BookOrder();
-            bookOrder.setBook(book);
-            bookOrder.setQuantity(item.getQuantity());
-            bookOrder.setOrder(order);
-
-            order.getBookOrders().add(bookOrder);
+            BookOrder bookOrder = new BookOrder(order, optionalBook.get(), bor.getQuantity());
+            bookOrderList.add(bookOrder);
         }
 
-        orderRepository.save(order);
+        order.setBookOrders(bookOrderList);
 
-           return ResponseEntity.ok("Order saved!");
+   
+        Order savedOrder = orderRepository.save(order);
+        return ResponseEntity.ok(savedOrder);
     }
 
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
-        return ResponseEntity.ok(orderService.getAllOrders());
+        return ResponseEntity.ok(orderRepository.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-        Order order = orderService.getOrderById(id);
-        if (order != null) {
-            return ResponseEntity.ok(order);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<?> getOrderById(@PathVariable Long id) {
+        return orderRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
-        orderService.deleteOrder(id);
+    public ResponseEntity<?> deleteOrder(@PathVariable Long id) {
+        if (!orderRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        orderRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/user/{userId}")
+    public List<Order> getOrdersByUserId(@PathVariable Long userId) {
+        return orderRepository.findByUserId(userId);
     }
 }

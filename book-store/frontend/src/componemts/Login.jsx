@@ -3,20 +3,40 @@ import { Link } from "react-router-dom"
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 const Login = () =>{
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
-    const [message, setMessage] = useState("")
-    const { login } = useAuth()
-    const navigate = useNavigate()
-    const handleLogin = (e) => {
-        e.preventDefault()
-        if (username === "Hung" && password === "123") {
-            login(username)
-            navigate("/") 
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
+    const { login } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+
+        try {
+            const res = await fetch('http://localhost:8082/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password }),
+            });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                setMessage(errorData.message || 'Invalid credentials');
+                return;
+            }
+
+            const data = await res.json();
+             login(data.token, data.user); 
+            if (data.user.role && data.user.role.includes('admin')) {
+            navigate('/admin/dashboard');
         } else {
-            setMessage("Please Enter Valid Username And Password")
+            navigate('/');
         }
-    }
+        } catch (error) {
+            setMessage('Login failed. Please try again.');
+        }
+    };
+
     return(
         
         <div>

@@ -6,13 +6,32 @@ const Category = () => {
   const [books, setBooks] = useState([]);
   const { categoryName } = useParams(); 
 
-  useEffect(() => {
-    fetch('/books.json')
-      .then((res) => res.json())
+  const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+  
+   useEffect(() => {
+    const token = localStorage.getItem("token"); 
+  
+    fetch("http://localhost:8082/api/books", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch books");
+        return res.json();
+      })
       .then((data) => {
         setBooks(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
       });
   }, []);
+  if (loading) return <p>Loading books...</p>;
+      if (error) return <p className="text-red-500">{error}</p>;
 
 
   const filteredBooks = categoryName ? books.filter((book) => book.category.toLowerCase() === categoryName.toLowerCase()): books;

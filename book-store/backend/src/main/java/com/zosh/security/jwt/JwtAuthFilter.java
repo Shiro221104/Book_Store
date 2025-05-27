@@ -33,11 +33,14 @@ protected void doFilterInternal(HttpServletRequest request,
         throws ServletException, IOException {
 
 
-    String path = request.getServletPath();
-if (path.equals("/api/auth/login") || path.equals("/api/auth/register")) {
+   String path = request.getServletPath();
+if (path.startsWith("/api/auth") || path.startsWith("/api/books")) 
+ {
     filterChain.doFilter(request, response);
     return;
 }
+
+
 
 
     final String authHeader = request.getHeader("Authorization");
@@ -45,14 +48,19 @@ if (path.equals("/api/auth/login") || path.equals("/api/auth/register")) {
     String token = null;
 
     if (authHeader != null && authHeader.startsWith("Bearer ")) {
-        token = authHeader.substring(7);
+    token = authHeader.substring(7);
 
-        try {
+    try {
+        if (jwtUtils.validateJwtToken(token)) {
             username = jwtUtils.getUsernameFromJwtToken(token);
-        } catch (Exception e) {
-            System.out.println("JWT token extraction failed: " + e.getMessage());
+        } else {
+            System.out.println("Invalid JWT token.");
         }
+    } catch (Exception e) {
+        System.out.println("JWT token validation failed: " + e.getMessage());
     }
+}
+
 
     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);

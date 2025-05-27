@@ -1,14 +1,16 @@
 package com.zosh.payload;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
 public class OrderRequest {
     private UserDTO user;
     private String status;
     private String shippingAddress; 
     private double totalPrice;
     private List<BookOrderRequest> bookOrders;
-    private PaymentDTO payment;
+   private LocalDateTime date;
+  
+    private String paymentMethod;
 
     public UserDTO getUser() {
         return user;
@@ -30,7 +32,7 @@ public class OrderRequest {
         return shippingAddress;
     }
 
-    public void setShippingAddress(String shippingAddress) {  
+    public void setShippingAddress(String shippingAddress) {
         this.shippingAddress = shippingAddress;
     }
 
@@ -50,11 +52,19 @@ public class OrderRequest {
         this.bookOrders = bookOrders;
     }
 
-    public PaymentDTO getPayment() {
-        return payment;
+
+    public String getPaymentMethod() {
+        return paymentMethod;
     }
 
-    public void setPayment(PaymentDTO payment) {
-        this.payment = payment;
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
+    public LocalDateTime getDate() {
+    return date;
+}
+
+public void setDate(LocalDateTime date) {
+    this.date = date;
+}
 }

@@ -1,22 +1,21 @@
 import React, { useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
-import { getImgUrl } from '../utils/getImgUrl';
+
 import { useAuth } from '../context/AuthContext'
 const CartPage = () => {
   const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
   
-  const subtotal = cartItems.reduce((sum, item) => sum + item.Price * item.quantity, 0);
- const { CurrentUser } = useAuth();
+  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+ const {  user } = useAuth();
  const navigate = useNavigate();
 
- 
  useEffect(() => {
-  if (!CurrentUser) {
+  if (!user) {
     alert("Please log in.");
     navigate('/login');
   }
-}, [CurrentUser, navigate]);
+}, [user, navigate]);
   return (
     <div className='flex mt-12 h-full flex-col overflow-hidden bg-white shadow-xl'>
       <div className='flex-1 overflow-y-auto px-4 py-6 sm:px-6'>
@@ -32,12 +31,12 @@ const CartPage = () => {
             {cartItems.map((item) => (
               <li key={item.id} className='flex py-6'>
                 <div className='h-24 w-24 overflow-hidden rounded-md border'>
-                  <img src={`${getImgUrl(item.Image)}`} alt={item.title} className='h-full w-full object-cover' />
+                  <img src={item.image} alt={item.title} className='h-full w-full object-cover' />
                 </div>
                 <div className='ml-4 flex-1'>
                   <div className='flex justify-between'>
                     <Link to='/' className='font-medium text-gray-900'>{item.title}</Link>
-                    <p className='text-gray-900'>${item.Price}</p>
+                    <p className='text-gray-900'>${item.price}</p>
                   </div>
                   <p className='text-sm text-gray-500'>Qty: {item.quantity}</p>
                   <button onClick={() => removeFromCart(item.id)} className='text-cyan-600 hover:text-cyan-500 mt-2'>

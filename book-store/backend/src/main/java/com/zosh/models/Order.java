@@ -1,5 +1,6 @@
 package com.zosh.models;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -13,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -39,19 +39,21 @@ private String shippingAddress;
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
-    private Payment payment;
+ @Enumerated(EnumType.STRING)
+@Column(name = "payment_method")
+private PaymentMethod paymentMethod;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<BookOrder> bookOrders;
-    public Long getId() {
-    return id;
-}
+@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+
+private List<BookOrder> bookOrders = new ArrayList<>();
+ 
 
 public void setId(Long id) {
     this.id = id;
 }
-
+public Long getId() {
+    return id;
+}
 public LocalDateTime getDate() {
     return date;
 }
@@ -90,12 +92,12 @@ public void setUser(User user) {
     this.user = user;
 }
 
-public Payment getPayment() {
-    return payment;
+public PaymentMethod getPaymentMethod() {
+    return paymentMethod;
 }
 
-public void setPayment(Payment payment) {
-    this.payment = payment;
+public void setPaymentMethod(PaymentMethod paymentMethod) {
+    this.paymentMethod = paymentMethod;
 }
 
 public List<BookOrder> getBookOrders() {
@@ -105,4 +107,5 @@ public List<BookOrder> getBookOrders() {
 public void setBookOrders(List<BookOrder> bookOrders) {
     this.bookOrders = bookOrders;
 }
+
 }

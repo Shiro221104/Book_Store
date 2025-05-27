@@ -6,7 +6,7 @@ import Footer from './componemts/Footer'
 
 function App() {
   const location = useLocation();
-  const hiddenRouters =['/login','/register','/cart','/checkout'];
+  const hiddenRouters =['/login','/register','/cart','/checkout','/admin/dashboard'];
   const hideNavbar = hiddenRouters.includes(location.pathname);
   const hideFooter = hiddenRouters.includes(location.pathname);
 

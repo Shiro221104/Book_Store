@@ -2,20 +2,23 @@ import React from 'react'
 import { FiShoppingCart } from "react-icons/fi"
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getImgUrl } from '../utils/getImgUrl';
+
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
-const BookPage = () =>{
-    const { id } = useParams();
+const BookPage = () => {
+  const { id } = useParams();
   const [book, setBook] = useState(null);
-const { addToCart } = useContext(CartContext);
-    const { CurrentUser } = useAuth();
-    const navigate = useNavigate()
+  const [books, setBooks] = useState([]); 
+  const { addToCart } = useContext(CartContext);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleAddToCart = () => {
-    if (!CurrentUser) {
+    if (!user) {
       alert("You must be logged in to add to cart.")
       navigate('/login')
     } else {
@@ -24,23 +27,38 @@ const { addToCart } = useContext(CartContext);
     }
   }
 
-  useEffect(() => {
-    fetch("/books.json")
-      .then((res) => res.json())
-      .then((data) => {
-        const found = data.find((b) => b.id === parseInt(id));
-        setBook(found);
-      })
-    
-  }, [id]);
 
+ 
+  useEffect(() => {
+  const token = localStorage.getItem("token");
+
+  fetch(`http://localhost:8082/api/books/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Failed to fetch book");
+      return res.json();
+    })
+    .then((data) => {
+      setBook(data);
+      setLoading(false);
+    })
+    .catch((err) => {
+      setError(err.message);
+      setLoading(false);
+    });
+}, [id]);
+if (loading) return <p>Loading books...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
   if (!book) return <div>Book not found</div>;
     return(
         <div className="max-w-5xl mx-auto p-4 grid grid-cols-1 md:grid-cols-2 gap-6 ">
         {/* Left: Book Image */}
         <div className="flex justify-center">
           <img
-            src={`${getImgUrl(book.Image)}`} // sửa thành đường dẫn ảnh tương ứng
+            src={book.image} // sửa thành đường dẫn ảnh tương ứng
             alt={book.title}
             className="w-full max-w-xs rounded shadow-md -ml-8"
           />
@@ -54,11 +72,11 @@ const { addToCart } = useContext(CartContext);
   
         
   
-          <div className=" text-2xl font-semibold">${book.Price}</div>
+          <div className=" text-2xl font-semibold">${book.price}</div>
   
           <ul className="text-sm space-y-1 text-gray-700">
-            <li><strong>Author:</strong> {book.Author} </li>
-            <li><strong>Publisher:</strong>  {book.Publisher}</li>
+            <li><strong>Author:</strong> {book.author} </li>
+            <li><strong>Publisher:</strong>  {book.publisher}</li>
             <li><strong>Genre:</strong> {book.genre}</li>
             <li><strong>Category:</strong> {book.category}</li>
             <li><strong>Description:</strong> <span className>{book.description}</span></li>

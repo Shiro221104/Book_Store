@@ -1,23 +1,39 @@
-import { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [CurrentUser, setCurrentUser] = useState(null); // Khởi tạo CurrentUser
+    const [token, setToken] = useState(null);
+    const [user, setUser] = useState(null);
 
-  const login = (username) => {
-    setCurrentUser({ username }); // Cập nhật CurrentUser
-  };
+    // Load from localStorage on first render
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        const storedUser = localStorage.getItem('user');
 
-  const logout = () => {
-    setCurrentUser(null); // Xóa CurrentUser
-  };
+        if (storedToken) setToken(storedToken);
+        if (storedUser) setUser(JSON.parse(storedUser));
+    }, []);
 
-  return (
-    <AuthContext.Provider value={{ CurrentUser, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+    const login = (newToken, newUser) => {
+        setToken(newToken);
+        setUser(newUser);
+        localStorage.setItem('token', newToken);
+        localStorage.setItem('user', JSON.stringify(newUser));
+    };
+
+    const logout = () => {
+        setToken(null);
+        setUser(null);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+    };
+
+    return (
+        <AuthContext.Provider value={{ token, user, login, logout, isAuthenticated: !!token }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
 export const useAuth = () => useContext(AuthContext);

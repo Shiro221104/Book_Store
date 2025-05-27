@@ -20,7 +20,7 @@ public class JwtUtils {
 
     private final String jwtSecret = "zoshSuperSecretKeyzoshSuperSecretKeyzoshSuperSecretKey1234567890123456";
 
-    private final int jwtExpirationMs = 86400000; // 1 ngày
+    private final int jwtExpirationMs = 7 * 86400000; // 7 ngày
 
     public String generateJwtToken(String username) {
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
