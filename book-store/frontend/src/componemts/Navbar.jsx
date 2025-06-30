@@ -124,6 +124,11 @@ const Navbar = () => {
                       <li onClick={() => setIsDropdownOpen(false)}>
                         <Link to="/order" className="block px-4 py-2 text-sm hover:bg-gray-100">Order</Link>
                       </li>
+                      {user.role === 'admin' && (
+                      <li onClick={() => setIsDropdownOpen(false)}>
+                       <Link to="/admin/dashboard" className="block px-4 py-2 text-sm hover:bg-gray-100">Dashboard</Link>
+                      </li>
+                        )}              
                       <li
                         onClick={() => {
                           logout();

@@ -77,6 +77,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/books/**").permitAll()
                 .requestMatchers("/api/auth/update").authenticated()
+                
                 .anyRequest().authenticated()
             )
             .authenticationProvider(authenticationProvider()) // cần có dòng này

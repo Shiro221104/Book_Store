@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +26,7 @@ import com.zosh.models.PaymentMethod;
 import com.zosh.models.User;
 import com.zosh.payload.BookOrderRequest;
 import com.zosh.payload.OrderRequest;
+import com.zosh.payload.OrderStatusUpdateRequest;
 import com.zosh.repository.BookRepository;
 import com.zosh.repository.OrderRepository;
 import com.zosh.repository.UserRepository;
@@ -107,4 +110,23 @@ public class OrderController {
     public List<Order> getOrdersByUserId(@PathVariable Long userId) {
         return orderRepository.findByUserId(userId);
     }
+  
+@PutMapping("/orders/{id}/status")
+public ResponseEntity<?> updateOrderStatus(
+        @PathVariable Long id,
+        @RequestBody OrderStatusUpdateRequest request
+) {
+    Optional<Order> optionalOrder = orderRepository.findById(id);
+    if (optionalOrder.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found");
+    }
+
+    Order order = optionalOrder.get();
+    order.setStatus(OrderStatus.valueOf(request.getStatus()));
+    orderRepository.save(order);
+
+    return ResponseEntity.ok("Order status updated successfully");
+}
+
+
 }

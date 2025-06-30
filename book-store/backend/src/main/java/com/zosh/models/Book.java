@@ -26,7 +26,7 @@ public class Book {
     private String category;
     private String publisher;
     private String image;
-    private int quatity;
+    private int quantity;
     private double price;
     private boolean trending;
 
@@ -37,7 +37,7 @@ private List<BookOrder> bookOrders = new ArrayList<>();
 
 
     public Book(Long id, String title, String author, String description, String genre,
-                String category, String publisher, String image, int quatity, double price, boolean trending) {
+                String category, String publisher, String image, int quantity, double price, boolean trending) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -46,7 +46,7 @@ private List<BookOrder> bookOrders = new ArrayList<>();
         this.category = category;
         this.publisher = publisher;
         this.image = image;
-        this.quatity = quatity;
+        this.quantity = quantity;
         this.price = price;
         this.trending = trending;
     }
@@ -117,12 +117,12 @@ private List<BookOrder> bookOrders = new ArrayList<>();
         this.image = image;
     }
 
-    public int getQuatity() {
-        return quatity;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setQuatity(int quatity) {
-        this.quatity = quatity;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public double getPrice() {
